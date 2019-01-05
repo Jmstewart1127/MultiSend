@@ -1,0 +1,6 @@
+name: Multi Send
+description: Sends an email through SMTP to multiple recipients.
+package: Custom
+type: module
+version: 1.0
+core: 8.x

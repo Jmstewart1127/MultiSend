@@ -1,0 +1,16 @@
+{
+    "name": "drupal/multisend",
+    "description": "Allows users to send email template to multiple recipients",
+    "type": "drupal-module",
+    "homepage": "https://drupal.org/project/",
+    "authors": [
+        {
+            "name": "Jake Stewart"
+        }
+    ],
+    "license": "GPL-2.0-or-later",
+    "minimum-stability": "dev",
+    "require": {
+        "phpmailer/phpmailer": "dev-master"
+    }
+}
