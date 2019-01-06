@@ -1,44 +1,43 @@
 <?php
 
-use PHPMailer\PHPMailer\PHPMailer;
+namespace Drupal\multisend\Service;
 
-/**
- * Created by PhpStorm.
- * User: jacobstewart
- * Date: 1/5/19
- * Time: 3:22 PM
- */
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+
+//require_once '../../../multisend/vendor/phpmailer/phpmailer/src/Exception.php';
+//require_once '../../vendor/phpmailer/phpmailer/src/PHPMailer.php';
+//require_once '../../vendor/phpmailer/phpmailer/src/SMTP.php';
 
 
 class MailerService
 {
-    private $smtpHost;
-    private $smtpUsername;
-    private $smtpPassword;
     private $mailer;
+    private $config;
+    private $attorney_data;
 
-    public function __construct($host, $username, $password)
+    public function __construct($attorney_data)
     {
-        $this->smtpHost = $host;
-        $this->smtpUsername = $username;
-        $this->smtpPassword = $password;
         $this->mailer = new PHPMailer(true);
+        $this->config = \Drupal::config('multisend.settings');
+        $this->attorney_data = $attorney_data;
     }
 
-    public function sendFormData($recipient, $sender)
+    public function sendFormData($recipient)
     {
         try {
             $this->mailer->SMTPDebug = 2;
             $this->mailer->isSMTP();
-            $this->mailer->Host = $this->smtpHost;
+            $this->mailer->Host = $this->config->get('smtp_host');
             $this->mailer->SMTPAuth = true;
-            $this->mailer->Username = $this->smtpUsername;
-            $this->mailer->Password = $this->smtpPassword;
+            $this->mailer->Username = $this->config->get('smtp_username');
+            $this->mailer->Password = $this->config->get('smtp_password');
             $this->mailer->SMTPSecure = 'tls';
             $this->mailer->Port = 587;
 
             //Recipients
-            $this->mailer->setFrom($form_data['email'], $form_data['first_name'] . ' ' . $form_data['last_name']);
+            $this->mailer->setFrom('mrsb@gmail.com', 'mrsb');
             $this->mailer->addAddress($recipient, $recipient);     // Add a recipient
             $this->mailer->addReplyTo('Jmstewart1127@gmail.com', 'Information');
             $this->mailer->addCC('Jmstewart1127@gmail.com');
@@ -47,7 +46,7 @@ class MailerService
             //Content
             $this->mailer->isHTML(true);
             $this->mailer->Subject = 'New Contact';
-            $this->mailer->Body = $this->renderEmailTemplate($sender);
+            $this->mailer->Body = $this->renderEmailTemplate();
 
             $this->mailer->send();
             echo 'Message has been sent';
@@ -56,10 +55,14 @@ class MailerService
         }
     }
 
-    private function renderEmailTemplate($sentFrom)
+    private function renderEmailTemplate()
     {
         ?>
-
+            <h3><?=$this->attorney_data ?></h3>
+            <h3></h3>
+            <h3></h3>
+            <h3></h3>
+            <h3></h3>
         <?php
     }
 }
