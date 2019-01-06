@@ -2,11 +2,11 @@
 /**
  * Created by PhpStorm.
  * User: jacobstewart
- * Date: 1/4/19
- * Time: 9:49 PM
+ * Date: 1/5/19
+ * Time: 3:27 PM
  */
 
-class FormController
+class FormInputValidator
 {
 
 }

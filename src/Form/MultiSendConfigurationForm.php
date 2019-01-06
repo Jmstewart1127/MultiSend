@@ -1,15 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jacobstewart
- * Date: 1/5/19
- * Time: 11:22 AM
- */
+
+namespace Drupal\multisend\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
-class ModuleConfigurationForm extends ConfigFormBase
+
+class MultiSendConfigurationForm extends ConfigFormBase
 {
 
     /**
@@ -60,6 +57,12 @@ class ModuleConfigurationForm extends ConfigFormBase
             '#open' => true
         ];
 
+        $form['smtp']['smtp_host'] = [
+            '#type' => 'textfield',
+            '#title' => $this->t('SMTP Host'),
+            '#default_value' => $config->get('smtp_host')
+        ];
+
         $form['smtp']['smtp_username'] = [
             '#type' => 'textfield',
             '#title' => $this->t('SMTP Username'),
@@ -73,5 +76,16 @@ class ModuleConfigurationForm extends ConfigFormBase
         ];
 
         return parent::buildForm($form, $form_state);
+    }
+
+    public function submitForm(array &$form, FormStateInterface $form_state)
+    {
+        $values = $form_state->getValues();
+
+        $this->config('multisend.settings')
+            ->set('smtp_host', $values['smtp_host'])
+            ->set('smtp_username', $values['smtp_username'])
+            ->set('smtp_password', $values['smtp_password'])
+            ->save();
     }
 }

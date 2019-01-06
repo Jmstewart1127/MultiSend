@@ -1,0 +1,15 @@
+multisend.admin_configuration:
+  path: '/admin/config/multisend'
+  defaults:
+    _form: '\Drupal\multisend\Form\MultiSendConfigurationForm'
+    _title: 'Multisend SMTP Configuration'
+  requirements:
+    _permission: 'administer site configuration'
+
+multisend.form:
+  path: '/share/page/{attorney}'
+  defaults:
+    _form: '\Drupal\multisend\Form\MultiSendForm'
+    _title: 'Multisend SMTP Configuration'
+  requirements:
+    _permission: 'administer site configuration'
