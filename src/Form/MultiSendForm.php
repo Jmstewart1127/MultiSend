@@ -93,6 +93,8 @@ class MultiSendForm extends FormBase
      */
     public function submitForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state)
     {
-        // TODO: Implement submitForm() method.
+        foreach ($form_state->getValues() as $key => $value) {
+            drupal_set_message($key . ': ' . $value);
+        }
     }
 }

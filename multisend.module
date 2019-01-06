@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Module file for block_example.
+ */
+
+function multisend_theme($existing, $type, $theme, $path)
+{
+    return array(
+        'multisend_template_form' => array(
+            'variables' => array('form' => null),
+            'template' => 'template-page-multisend-form'
+        ),
+
+        'multisend_template_form_with_attorney' => array(
+          'variables' => array('data' => null),
+          'template' => 'template-page-multisend-form-with-attorney'
+        )
+    );
+}
+
