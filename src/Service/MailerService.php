@@ -6,11 +6,6 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 
-//require_once '../../../multisend/vendor/phpmailer/phpmailer/src/Exception.php';
-//require_once '../../vendor/phpmailer/phpmailer/src/PHPMailer.php';
-//require_once '../../vendor/phpmailer/phpmailer/src/SMTP.php';
-
-
 class MailerService
 {
     private $mailer;
@@ -30,7 +25,7 @@ class MailerService
             $this->mailer->SMTPDebug = 2;
             $this->mailer->isSMTP();
             $this->mailer->Host = $this->config->get('smtp_host');
-            $this->mailer->SMTPAuth = true;
+            $this->mailer->SMTPAuth = false;
             $this->mailer->Username = $this->config->get('smtp_username');
             $this->mailer->Password = $this->config->get('smtp_password');
             $this->mailer->SMTPSecure = 'tls';
@@ -38,7 +33,7 @@ class MailerService
 
             //Recipients
             $this->mailer->setFrom('mrsb@gmail.com', 'mrsb');
-            $this->mailer->addAddress($recipient, $recipient);     // Add a recipient
+            $this->mailer->addAddress($recipient, $recipient);
             $this->mailer->addReplyTo('Jmstewart1127@gmail.com', 'Information');
             $this->mailer->addCC('Jmstewart1127@gmail.com');
             $this->mailer->addBCC('Jmstewart1127@gmail.com');
