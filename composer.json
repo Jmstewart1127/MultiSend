@@ -10,12 +10,4 @@
     ],
     "license": "GPL-2.0-or-later",
     "minimum-stability": "dev",
-    "require": {
-        "phpmailer/phpmailer": "dev-master"
-    },
-    "autoload": {
-        "psr-4": {
-            "PHPMailer\\PHPMailer\\": "src/"
-        }
-    }
 }

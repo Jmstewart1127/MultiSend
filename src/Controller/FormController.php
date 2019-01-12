@@ -43,6 +43,7 @@ class FormController extends ControllerBase
 
     private function getNodeAlias($nid)
     {
-        return \Drupal::service('path.alias_manager')->getAliasByPath('/node/'.$nid);
+        return \Drupal::service('path.alias_manager')
+            ->getAliasByPath('/node/'.$nid);
     }
 }

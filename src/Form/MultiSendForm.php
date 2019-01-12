@@ -6,12 +6,17 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\multisend\Service\FormInputValidator;
 use Drupal\multisend\Service\MailerService;
+use Drupal\smtp\PHPMailer\PHPMailer;
 
 
 class MultiSendForm extends FormBase
 {
     private $formValidator;
     private $mailerService;
+
+    public function __construct()
+    {
+    }
 
     /**
      * Returns a unique string identifying the form.
@@ -101,22 +106,23 @@ class MultiSendForm extends FormBase
 
         $this->formValidator = new FormInputValidator($email_addresses);
 
-        $this->mailerService = new MailerService('data');
+        $this->mailerService = new MailerService('data', new PHPMailer(true));
 
         $email_addresses = $this->formValidator->getEmailAddresses();
 
         $config = \Drupal::config('multisend.settings');
 
-        foreach ($form_state->getValues() as $key => $value) {
+        foreach ($form_state->getValues() as $key => $value)
+        {
             drupal_set_message($key . ': ' . $value);
-            if ($key == 'send_to_addresses') {
-                foreach ($email_addresses as $email_address) {
+            if ($key == 'send_to_addresses')
+            {
+                foreach ($email_addresses as $email_address)
+                {
                     drupal_set_message('email address' . $email_address);
                     $this->mailerService->sendFormData($email_address);
                 }
             }
         }
-
-        drupal_set_message('config: ' . $config->get('smtp_password'));
     }
 }

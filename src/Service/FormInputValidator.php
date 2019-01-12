@@ -18,22 +18,22 @@ class FormInputValidator
         $this->removeSpaces();
     }
 
-    public function splitAddresses()
+    private function splitAddresses()
     {
         return explode(',', $this->emailAddresses);
     }
 
-    public function removeSpaces()
+    private function removeSpaces()
     {
         $addresses = $this->splitAddresses();
 
         $addresses_without_spaces = [];
 
         $i = 0;
-        foreach ($addresses as $address) {
+        foreach ($addresses as $address)
+        {
             $address = preg_replace('/\s+/', '', $address);
-            $addresses_without_spaces[$i] = $address;
-            $i++;
+            $addresses_without_spaces[$i++] = $address;
         }
 
         $this->setEmailAddresses($addresses_without_spaces);
