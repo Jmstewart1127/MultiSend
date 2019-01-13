@@ -3,12 +3,22 @@
 namespace Drupal\multisend\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\multisend\Service\AttorneyService;
+use Drupal\multisend\Service\NodeService;
+use Drupal\multisend\Service\PracticeAreaService;
 use Drupal\node\Entity\Node;
-use Drupal\node\NodeInterface;
-
 
 class FormController extends ControllerBase
 {
+    private $attorneyService;
+    private $practiceAreaService;
+
+    public function __construct()
+    {
+        $this->attorneyService = new AttorneyService();
+        $this->practiceAreaService = new PracticeAreaService();
+    }
+
     public function showContactForm()
     {
         $form = $this->getForm();
@@ -21,7 +31,7 @@ class FormController extends ControllerBase
 
     public function showFormWithAttorney($attorney)
     {
-        $form = $this->getForm();
+        $form = $this->getForm($attorney);
 
         $node = Node::load((int)$attorney);
 
@@ -30,20 +40,46 @@ class FormController extends ControllerBase
             '#data' => [
                 'form' => $form,
                 'attorney' => $node->getTitle(),
-                'attorney_alias' => $this->getNodeAlias($node->id())
+                'attorney_alias' => $this->attorneyService->getAttorneyAlias($node->id())
             ],
         ];
     }
 
-    private function getForm()
+    public function showFormForSinglePracticeArea($practiceAreaId)
     {
-        return \Drupal::formBuilder()
-            ->getForm('Drupal\multisend\Form\MultiSendForm');
+        $form = $this->getForm();
+
+        $form->set('node_id', $practiceAreaId);
+
+        $node = $this->practiceAreaService->getPracticeAreaById($practiceAreaId);
+
+        return [
+            '#theme' => 'multisend_template_form_for_practice_area',
+            '#data' => [
+                'form' => $form,
+                'practice_area' => $node,
+            ],
+        ];
     }
 
-    private function getNodeAlias($nid)
+    public function showFormForAllPracticeAreas()
     {
-        return \Drupal::service('path.alias_manager')
-            ->getAliasByPath('/node/'.$nid);
+        $form = $this->getForm();
+
+        $nodes = $this->practiceAreaService->getAllPracticeAreas();
+
+        return [
+            '#theme' => 'multisend_template_form_for_all_practice_areas',
+            '#data' => [
+                'form' => $form,
+                'practice_areas' => $nodes,
+            ],
+        ];
+    }
+
+    private function getForm($node_id)
+    {
+        return \Drupal::formBuilder()
+            ->getForm('Drupal\multisend\Form\MultiSendForm', $node_id);
     }
 }

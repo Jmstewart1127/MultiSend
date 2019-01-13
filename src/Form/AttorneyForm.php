@@ -1,15 +1,17 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: jacobstewart
+ * Date: 1/12/19
+ * Time: 3:25 PM
+ */
 
 namespace Drupal\multisend\Form;
 
+
 use Drupal\Core\Form\FormBase;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\multisend\Service\FormInputValidator;
-use Drupal\multisend\Service\MailerService;
-use Drupal\smtp\PHPMailer\PHPMailer;
 
-
-class MultiSendForm extends FormBase
+class AttorneyForm extends FormBase
 {
     private $formValidator;
     private $mailerService;
@@ -40,13 +42,11 @@ class MultiSendForm extends FormBase
      *   An associative array containing the structure of the form.
      * @param \Drupal\Core\Form\FormStateInterface $form_state
      *   The current state of the form.
-     * @param string $attorney
-     *   Attorney ID passed from controller.
      *
      * @return array
      *   The form structure.
      */
-    public function buildForm(array $form, FormStateInterface $form_state, $attorney = NULL)
+    public function buildForm(array $form, FormStateInterface $form_state)
     {
         $form['user_email'] = [
             '#type' => 'email',
@@ -83,11 +83,6 @@ class MultiSendForm extends FormBase
             '#required' => true
         ];
 
-        $form['node_id'] = [
-            '#type' => 'hidden',
-            '#value' => $attorney
-        ];
-
         $form['actions']['#type'] = 'actions';
 
         $form['actions']['submit'] = [
@@ -109,13 +104,11 @@ class MultiSendForm extends FormBase
      */
     public function submitForm(array &$form, FormStateInterface $form_state)
     {
-        $node_id = $form_state->getValue('node_id');
-
         $email_addresses = $form_state->getValue('send_to_addresses');
 
         $this->formValidator = new FormInputValidator($email_addresses);
 
-        $this->mailerService = new MailerService(new PHPMailer(true), $node_id);
+        $this->mailerService = new MailerService('data', new PHPMailer(true));
 
         $email_addresses = $this->formValidator->getEmailAddresses();
 
@@ -127,7 +120,7 @@ class MultiSendForm extends FormBase
                 foreach ($email_addresses as $email_address)
                 {
                     drupal_set_message('email address' . $email_address);
-                    $this->mailerService->sendFormData('ATTORNEY', $email_address);
+                    $this->mailerService->sendFormData($email_address);
                 }
             }
         }

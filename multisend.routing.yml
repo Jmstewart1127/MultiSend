@@ -30,3 +30,21 @@ multisend.form_template_with_attorney:
   requirements:
     _permission: 'access content'
     name: '^[0-9]*$'
+
+multisend.form_template_for_practice_area:
+  path: '/share/practice-area/{practiceAreaId}'
+  defaults:
+    _controller: '\Drupal\multisend\Controller\FormController::showFormForSinglePracticeArea'
+    _title: 'Share Practice Area'
+  requirements:
+    _permission: 'access content'
+    name: '^[0-9]*$'
+
+multisend.form_template_for_all_practice_areas:
+  path: '/share/practice-areas/'
+  defaults:
+    _controller: '\Drupal\multisend\Controller\FormController::showFormForAllPracticeAreas'
+    _title: 'Share Practice Areas'
+  requirements:
+    _permission: 'access content'
+    name: '^[0-9]*$'

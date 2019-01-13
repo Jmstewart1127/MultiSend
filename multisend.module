@@ -14,9 +14,19 @@ function multisend_theme($existing, $type, $theme, $path)
         ),
 
         'multisend_template_form_with_attorney' => array(
-          'variables' => array('data' => null),
-          'template' => 'template-page-multisend-form-with-attorney'
-        )
+            'variables' => array('data' => null),
+            'template' => 'template-page-multisend-form-with-attorney'
+        ),
+
+        'multisend_template_form_for_practice_area' => array(
+            'variables' => array('data' => null),
+            'template' => 'template-page-multisend-form-with-attorney'
+        ),
+
+        'multisend_template_form_for_all_practice_areas' => array(
+            'variables' => array('data' => null),
+            'template' => 'template-page-multisend-form-with-attorney'
+        ),
     );
 }
 
