@@ -12,5 +12,7 @@ interface AttorneyRepository
 {
     public function getAttorneyById($id);
 
+    public function getAttorneyAlias($id);
+
     public function getAttorneyDataById($id);
 }

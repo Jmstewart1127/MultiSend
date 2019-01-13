@@ -25,6 +25,55 @@ class PracticeAreaService implements PracticeAreaRepository
         return $this->nodeService->getNodeById($id);
     }
 
+    private function getChairs($practice_area)
+    {
+        $chairs = $practice_area->get('field_chairs_ref')->referencedEntities();
+
+        $store_chairs = [];
+
+        foreach ($chairs as $chair)
+        {
+            $store_chairs[] = [
+                'chair_name' => $chair->getTitle(),
+                'chair_alias' => $this->nodeService->getNodeAlias($chair->id())
+            ];
+        }
+
+        return $store_chairs;
+    }
+
+    private function getMembersOfPractice($practice_area)
+    {
+        $members = $practice_area->get('field_members2')->referencedEntities();
+
+        $store_members = [];
+
+        foreach ($members as $member)
+        {
+            $store_members[] = [
+                'member_name' => $member->getTitle(),
+                'member_alias' => $this->nodeService->getNodeAlias($member->id())
+            ];
+        }
+
+        return $store_members;
+    }
+
+    public function getSinglePracticeAreaDataById($id)
+    {
+        $practice_area = $this->getPracticeAreaById($id);
+
+        $chairs = $this->getChairs($practice_area);
+
+        $members_of_practice = $this->getMembersOfPractice($practice_area);
+
+        return [
+            'practice_area_name' => $practice_area->getTitle(),
+            'practice_area_chairs' => $chairs,
+            'practice_area_members' => $members_of_practice
+        ];
+    }
+
     public function getAllPracticeAreas()
     {
         $nodes = $this->nodeService->buildEntityQuery('practice_areas');

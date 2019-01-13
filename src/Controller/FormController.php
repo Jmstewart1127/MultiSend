@@ -33,7 +33,7 @@ class FormController extends ControllerBase
     {
         $form = $this->getForm($attorney);
 
-        $node = Node::load((int)$attorney);
+        $node = $this->attorneyService->getAttorneyById($attorney);
 
         return [
             '#theme' => 'multisend_template_form_with_attorney',
@@ -47,9 +47,7 @@ class FormController extends ControllerBase
 
     public function showFormForSinglePracticeArea($practiceAreaId)
     {
-        $form = $this->getForm();
-
-        $form->set('node_id', $practiceAreaId);
+        $form = $this->getForm($practiceAreaId);
 
         $node = $this->practiceAreaService->getPracticeAreaById($practiceAreaId);
 
@@ -77,7 +75,7 @@ class FormController extends ControllerBase
         ];
     }
 
-    private function getForm($node_id)
+    private function getForm($node_id = NULL)
     {
         return \Drupal::formBuilder()
             ->getForm('Drupal\multisend\Form\MultiSendForm', $node_id);

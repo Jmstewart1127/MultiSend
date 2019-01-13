@@ -10,6 +10,10 @@ namespace Drupal\multisend\Form;
 
 
 use Drupal\Core\Form\FormBase;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\multisend\Service\FormInputValidator;
+use Drupal\multisend\Service\MailerService;
+use Drupal\smtp\PHPMailer\PHPMailer;
 
 class PracticeAreasForm extends FormBase
 {
@@ -108,7 +112,7 @@ class PracticeAreasForm extends FormBase
 
         $this->formValidator = new FormInputValidator($email_addresses);
 
-        $this->mailerService = new MailerService('data', new PHPMailer(true));
+        $this->mailerService = new MailerService(new PHPMailer(true));
 
         $email_addresses = $this->formValidator->getEmailAddresses();
 
@@ -120,7 +124,7 @@ class PracticeAreasForm extends FormBase
                 foreach ($email_addresses as $email_address)
                 {
                     drupal_set_message('email address' . $email_address);
-                    $this->mailerService->sendFormData($email_address);
+                    $this->mailerService->sendFormData('ALL_PRACTICE_AREAS', $email_address);
                 }
             }
         }

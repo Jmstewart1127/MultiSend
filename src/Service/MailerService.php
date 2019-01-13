@@ -11,16 +11,18 @@ class MailerService
     private $attorneyService;
     private $practiceAreaService;
     private $nodeId;
+    private $baseUrl;
     private $TEMPLATE_TYPE = [
         'PRACTICE_AREA',
         'ALL_PRACTICE_AREAS',
         'ATTORNEY'
     ];
 
-    public function __construct(PHPMailer $mailer, $nodeId)
+    public function __construct(PHPMailer $mailer, $nodeId = null)
     {
         $this->mailer = $mailer;
         $this->nodeId = $nodeId;
+        $this->baseUrl = \Drupal::request()->getSchemeAndHttpHost();
         $this->config = \Drupal::config('multisend.settings');
         $this->attorneyService = new AttorneyService();
         $this->practiceAreaService = new PracticeAreaService();
@@ -56,7 +58,7 @@ class MailerService
     {
         switch ($TEMPLATE_TYPE) {
             case 'PRACTICE_AREA':
-                return $this->getPracticeAreaTemplate();
+                return $this->getSinglePracticeAreaTemplate();
             case 'PRACTICE_AREAS':
                 return $this->getAllPracticeAreasTemplate();
             case 'ATTORNEY':
@@ -64,23 +66,64 @@ class MailerService
         }
     }
 
-    private function getPracticeAreaTemplate()
+    private function getSinglePracticeAreaTemplate()
     {
+        $single_practice_area = $this->practiceAreaService
+            ->getSinglePracticeAreaDataById($this->nodeId);
 
+        $template = '<h3>' . $single_practice_area['practice_area_title'] . '</h3><hr>';
+        $template .= '<h3>Chairs</h3>';
+        $template .= '<ul>';
 
-        $template = '';
+        foreach ($single_practice_area['practice_area_chairs'] as $chair)
+        {
+            $template .=
+                '<li>' .
+                    '<a href="' . $this->baseUrl . $chair['chair_alias'] . '">'
+                        . $chair['name_title'] .
+                    '</a>' .
+                '</li>';
+        }
 
+        $template .= '</ul>';
+        $template .= '<h3>Members of Practice</h3><hr>';
+        $template .= '<ul>';
 
+        foreach ($single_practice_area['practice_area_members'] as $member)
+        {
+            $template .=
+                '<li>' .
+                    '<a href="' . $this->baseUrl . $member['member_alias'] . '">'
+                        . $chair['member_name'] .
+                    '</a>' .
+                '</li>';
+        }
+
+        $template .= '</ul>';
 
         return $template;
     }
 
     private function getAllPracticeAreasTemplate()
     {
-        $template = '';
+        $practice_areas = $this->practiceAreaService->getAllPracticeAreas();
 
+        $template = '<h3>Practice Areas</h3>';
+        $template .= '<ul>';
 
-        return '';
+        foreach ($practice_areas as $practice_area)
+        {
+            $template .=
+                '<li>' .
+                    '<a href="' . $this->baseUrl . $practice_area['alias'] . '">'
+                        . $practice_area['title'] .
+                    '</a>' .
+                '</li>';
+        }
+
+        $template .= '</ul>';
+
+        return $template;
     }
 
     private function getAttorneyTemplate()
@@ -98,7 +141,7 @@ class MailerService
         foreach ($attorney['practice_areas'] as $practice_area)
         {
             $template .=
-                '<li><a href="'. $practice_area['practice_area_alias'] .'">'
+                '<li><a href="'. $this->baseUrl . $practice_area['practice_area_alias'] .'">'
                 . $practice_area['practice_area'] .
                 '</a></li>';
         }

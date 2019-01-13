@@ -46,11 +46,13 @@ class SinglePracticeAreaForm extends FormBase
      *   An associative array containing the structure of the form.
      * @param \Drupal\Core\Form\FormStateInterface $form_state
      *   The current state of the form.
+     * @param string $practice_area
+     *   Practice Area ID passed from controller.
      *
      * @return array
      *   The form structure.
      */
-    public function buildForm(array $form, FormStateInterface $form_state)
+    public function buildForm(array $form, FormStateInterface $form_state, $practice_area = NULL)
     {
         $form['user_email'] = [
             '#type' => 'email',
@@ -87,6 +89,11 @@ class SinglePracticeAreaForm extends FormBase
             '#required' => true
         ];
 
+        $form['node_id'] = [
+            '#type' => 'hidden',
+            '#value' => $practice_area
+        ];
+
         $form['actions']['#type'] = 'actions';
 
         $form['actions']['submit'] = [
@@ -108,11 +115,13 @@ class SinglePracticeAreaForm extends FormBase
      */
     public function submitForm(array &$form, FormStateInterface $form_state)
     {
+        $node_id = $form_state->getValue('node_id');
+
         $email_addresses = $form_state->getValue('send_to_addresses');
 
         $this->formValidator = new FormInputValidator($email_addresses);
 
-        $this->mailerService = new MailerService('data', new PHPMailer(true));
+        $this->mailerService = new MailerService(new PHPMailer(true), $node_id);
 
         $email_addresses = $this->formValidator->getEmailAddresses();
 
@@ -124,7 +133,7 @@ class SinglePracticeAreaForm extends FormBase
                 foreach ($email_addresses as $email_address)
                 {
                     drupal_set_message('email address' . $email_address);
-                    $this->mailerService->sendFormData($email_address);
+                    $this->mailerService->sendFormData('PRACTICE_AREA', $email_address);
                 }
             }
         }
