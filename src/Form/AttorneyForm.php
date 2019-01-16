@@ -10,6 +10,7 @@ namespace Drupal\multisend\Form;
 
 
 use Drupal\Core\Form\FormBase;
+use Drupal\Core\Form\FormStateInterface;
 
 class AttorneyForm extends FormBase
 {

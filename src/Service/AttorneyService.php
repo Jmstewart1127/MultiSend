@@ -9,6 +9,7 @@
 namespace Drupal\multisend\Service;
 
 use Drupal\multisend\Repository\AttorneyRepository;
+use Drupal\paragraphs\Entity\Paragraph;
 
 
 class AttorneyService implements AttorneyRepository
@@ -16,6 +17,7 @@ class AttorneyService implements AttorneyRepository
     private $nodeService;
     private $attorneyData;
     private $practiceAreas = [];
+    private $bioTabs = [];
 
     public function __construct()
     {
@@ -47,11 +49,32 @@ class AttorneyService implements AttorneyRepository
         return $this->practiceAreas;
     }
 
+    private function getBioTabs($attorney)
+    {
+        $bio_tabs = $attorney->field_bio_tabs->referencedEntities();
+
+        foreach ($bio_tabs as $bio_tab)
+        {
+            $bio_tab_values = $bio_tab->bp_accordion_section->referencedEntities();
+            foreach ($bio_tab_values as $bio_tab_value)
+            {
+                $this->bioTabs[] = [
+                    'title' => $bio_tab_value->bp_accordion_section_title->value,
+                    'body' => $bio_tab_value->bp_accordion_section_body->entity->bp_text->value,
+                ];
+            }
+        }
+
+        return $this->bioTabs;
+    }
+
     public function getAttorneyDataById($id)
     {
         $attorney = $this->getAttorneyById($id);
 
         $practice_areas = $this->getPracticeAreas($attorney);
+
+        $bio_tabs = $this->getBioTabs($attorney);
 
         return [
             'name' => $attorney->getTitle(),
@@ -60,7 +83,8 @@ class AttorneyService implements AttorneyRepository
             'education' => $attorney->get('field_education')->value,
             'linkedin' => $attorney->get('field_linkedin')->value,
             'phone' => $attorney->get('field_phone')->value,
-            'practice_areas' => $practice_areas
+            'bio_tabs' => $bio_tabs,
+            'practice_areas' => $practice_areas,
         ];
     }
 
@@ -79,6 +103,4 @@ class AttorneyService implements AttorneyRepository
     {
         $this->attorneyData = $attorneyData;
     }
-
-
 }

@@ -148,6 +148,12 @@ class MailerService
 
         $template .= '</ul>';
 
+        foreach ($attorney['bio_tabs'] as $bio_tab)
+        {
+            $template .= '<p>' . $bio_tab['title'] . '</p>';
+            $template .= '<p>' . $bio_tab['body'] . '</p>';
+        }
+
         return $template;
     }
 }

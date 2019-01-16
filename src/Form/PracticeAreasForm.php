@@ -91,7 +91,7 @@ class PracticeAreasForm extends FormBase
 
         $form['actions']['submit'] = [
             '#type' => 'submit',
-            '#value' => $this->t('Save'),
+            '#value' => $this->t('Send'),
             '#button_type' => 'primary'
         ];
 
