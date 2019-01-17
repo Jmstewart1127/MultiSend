@@ -72,7 +72,7 @@ class MailerService
             ->getSinglePracticeAreaDataById($this->nodeId);
 
         $template = '<h3>' . $single_practice_area['practice_area_title'] . '</h3><hr>';
-        $template .= '<h3>Chairs</h3>';
+        $template .= '<h3>Chairs</h3><hr>';
         $template .= '<ul>';
 
         foreach ($single_practice_area['practice_area_chairs'] as $chair)
@@ -108,7 +108,7 @@ class MailerService
     {
         $practice_areas = $this->practiceAreaService->getAllPracticeAreas();
 
-        $template = '<h3>Practice Areas</h3>';
+        $template = '<h3>Practice Areas</h3><hr>';
         $template .= '<ul>';
 
         foreach ($practice_areas as $practice_area)
@@ -130,12 +130,18 @@ class MailerService
     {
         $attorney = $this->attorneyService->getAttorneyDataById($this->nodeId);
 
+        $template .=  '<h3>Attorney</h3><hr>';
         $template =  '<p>'. $attorney['name'] .'</p>';
+        $template .=  '<h3>Bar Admissions</h3><hr>';
         $template .= '<p>'. $attorney['bar_admissions'] .'</p>';
+        $template .=  '<h3>Court Admissions</h3><hr>';
         $template .= '<p>'. $attorney['court_admissions'] .'</p>';
+        $template .=  '<h3>Education</h3><hr>';
         $template .= '<p>'. $attorney['education'] .'</p>';
+        $template .=  '<h3>Contact Info</h3><hr>';
         $template .= '<p>'. $attorney['linkedin'] .'</p>';
         $template .= '<p>'. $attorney['phone'] .'</p>';
+        $template .=  '<h3>Practice Areas</h3><hr>';
         $template .= '<ul>';
 
         foreach ($attorney['practice_areas'] as $practice_area)
@@ -150,7 +156,7 @@ class MailerService
 
         foreach ($attorney['bio_tabs'] as $bio_tab)
         {
-            $template .= '<p>' . $bio_tab['title'] . '</p>';
+            $template .= '<h3>' . $bio_tab['title'] . '</h3><hr>';
             $template .= '<p>' . $bio_tab['body'] . '</p>';
         }
 
