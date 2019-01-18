@@ -15,118 +15,108 @@ use Drupal\multisend\Service\FormInputValidator;
 use Drupal\multisend\Service\MailerService;
 use Drupal\smtp\PHPMailer\PHPMailer;
 
-class PracticeAreasForm extends FormBase
-{
-    private $formValidator;
-    private $mailerService;
+class PracticeAreasForm extends FormBase {
 
-    public function __construct()
-    {
-    }
+  private $formValidator;
+  private $mailerService;
 
-    /**
-     * Returns a unique string identifying the form.
-     *
-     * The returned ID should be a unique string that can be a valid PHP function
-     * name, since it's used in hook implementation names such as
-     * hook_form_FORM_ID_alter().
-     *
-     * @return string
-     *   The unique string identifying the form.
-     */
-    public function getFormId()
-    {
-        return 'multisend_form';
-    }
+  public function __construct() {}
 
-    /**
-     * Form constructor.
-     *
-     * @param array $form
-     *   An associative array containing the structure of the form.
-     * @param \Drupal\Core\Form\FormStateInterface $form_state
-     *   The current state of the form.
-     *
-     * @return array
-     *   The form structure.
-     */
-    public function buildForm(array $form, FormStateInterface $form_state)
-    {
-        $form['user_email'] = [
-            '#type' => 'email',
-            '#title' => t('Your Email'),
-            '#required' => true
-        ];
+  /**
+   * Returns a unique string identifying the form.
+   *
+   * The returned ID should be a unique string that can be a valid PHP function
+   * name, since it's used in hook implementation names such as
+   * hook_form_FORM_ID_alter().
+   *
+   * @return string
+   *   The unique string identifying the form.
+   */
+  public function getFormId() {
+    return 'multisend_form';
+  }
 
-        $form['user_name'] = [
-            '#type' => 'textfield',
-            '#title' => t('Your Name'),
-        ];
+  /**
+   * Form constructor.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @return array
+   *   The form structure.
+   */
+  public function buildForm(array $form, FormStateInterface $form_state) {
+    $form['user_email'] = [
+      '#type' => 'email',
+      '#title' => t('Your Email'),
+      '#required' => true
+    ];
 
-        $form['user_email'] = [
-            '#type' => 'email',
-            '#title' => t('Your Email'),
-            '#required' => true
-        ];
+    $form['user_name'] = [
+      '#type' => 'textfield',
+      '#title' => t('Your Name'),
+    ];
 
-        $form['send_to_addresses'] = [
-            '#type' => 'textarea',
-            '#title' => t('Send To (Enter Multiple Email Addresses Separated By a Comma)'),
-            '#required' => true
-        ];
+    $form['user_email'] = [
+      '#type' => 'email',
+      '#title' => t('Your Email'),
+      '#required' => true
+    ];
 
-        $form['subject'] = [
-            '#type' => 'textfield',
-            '#title' => t('Subject'),
-            '#required' => true
-        ];
+    $form['send_to_addresses'] = [
+      '#type' => 'textarea',
+      '#title' => t('Send To (Enter Multiple Email Addresses Separated By a Comma)'),
+      '#required' => true
+    ];
 
-        $form['message'] = [
-            '#type' => 'textarea',
-            '#title' => t('Your Message'),
-            '#required' => true
-        ];
+    $form['subject'] = [
+      '#type' => 'textfield',
+      '#title' => t('Subject'),
+      '#required' => true
+    ];
 
-        $form['actions']['#type'] = 'actions';
+    $form['message'] = [
+      '#type' => 'textarea',
+      '#title' => t('Your Message'),
+      '#required' => true
+    ];
 
-        $form['actions']['submit'] = [
-            '#type' => 'submit',
-            '#value' => $this->t('Send'),
-            '#button_type' => 'primary'
-        ];
+    $form['actions']['#type'] = 'actions';
 
-        return $form;
-    }
+    $form['actions']['submit'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Send'),
+      '#button_type' => 'primary'
+    ];
 
-    /**
-     * Form submission handler.
-     *
-     * @param array $form
-     *   An associative array containing the structure of the form.
-     * @param \Drupal\Core\Form\FormStateInterface $form_state
-     *   The current state of the form.
-     */
-    public function submitForm(array &$form, FormStateInterface $form_state)
-    {
-        $email_addresses = $form_state->getValue('send_to_addresses');
+    return $form;
+  }
 
-        $this->formValidator = new FormInputValidator($email_addresses);
+  /**
+   * Form submission handler.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    $email_addresses = $form_state->getValue('send_to_addresses');
+    $this->formValidator = new FormInputValidator($email_addresses);
+    $this->mailerService = new MailerService(new PHPMailer(true));
+    $email_addresses = $this->formValidator->getEmailAddresses();
 
-        $this->mailerService = new MailerService(new PHPMailer(true));
-
-        $email_addresses = $this->formValidator->getEmailAddresses();
-
-        foreach ($form_state->getValues() as $key => $value)
-        {
-            drupal_set_message($key . ': ' . $value);
-            if ($key == 'send_to_addresses')
-            {
-                foreach ($email_addresses as $email_address)
-                {
-                    drupal_set_message('email address' . $email_address);
-                    $this->mailerService->sendFormData('ALL_PRACTICE_AREAS', $email_address);
-                }
-            }
+    foreach ($form_state->getValues() as $key => $value) {
+      drupal_set_message($key . ': ' . $value);
+      if ($key == 'send_to_addresses') {
+        foreach ($email_addresses as $email_address) {
+          drupal_set_message('email address' . $email_address);
+          $this->mailerService->sendFormData('ALL_PRACTICE_AREAS', $email_address);
         }
+      }
     }
+  }
+
 }

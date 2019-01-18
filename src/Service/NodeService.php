@@ -11,27 +11,25 @@ namespace Drupal\multisend\Service;
 
 use Drupal\node\Entity\Node;
 
-class NodeService
-{
-    public function getNodeById($id)
-    {
-        return Node::load((int) $id);
-    }
+class NodeService {
 
-    public function getNodeAlias($nid)
-    {
-        return \Drupal::service('path.alias_manager')
-            ->getAliasByPath('/node/'.$nid);
-    }
+  public function getNodeById($id) {
+    return Node::load((int)$id);
+  }
 
-    public function buildEntityQuery($entity)
-    {
-        $query = \Drupal::entityQuery('node')
-            ->condition('status', 1)
-            ->condition('type', $entity);
+  public function getNodeAlias($nid) {
+    return \Drupal::service('path.alias_manager')
+      ->getAliasByPath('/node/' . $nid);
+  }
 
-        $nids = $query->execute();
+  public function buildEntityQuery($entity) {
+    $query = \Drupal::entityQuery('node')
+      ->condition('status', 1)
+      ->condition('type', $entity);
 
-        return \Drupal\node\Entity\Node::loadMultiple($nids);
-    }
+    $nids = $query->execute();
+
+    return \Drupal\node\Entity\Node::loadMultiple($nids);
+  }
+
 }

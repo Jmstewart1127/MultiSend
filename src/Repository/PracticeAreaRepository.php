@@ -9,11 +9,10 @@
 namespace Drupal\multisend\Repository;
 
 
-interface PracticeAreaRepository
-{
+interface PracticeAreaRepository {
+
     public function getPracticeAreaById($id);
-
     public function getSinglePracticeAreaDataById($id);
-
     public function getAllPracticeAreas();
+
 }

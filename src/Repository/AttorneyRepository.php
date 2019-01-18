@@ -8,11 +8,10 @@
 
 namespace Drupal\multisend\Repository;
 
-interface AttorneyRepository
-{
-    public function getAttorneyById($id);
+interface AttorneyRepository {
 
-    public function getAttorneyAlias($id);
+  public function getAttorneyById($id);
+  public function getAttorneyAlias($id);
+  public function getAttorneyDataById($id);
 
-    public function getAttorneyDataById($id);
 }

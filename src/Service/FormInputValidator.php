@@ -8,44 +8,38 @@
 
 namespace Drupal\multisend\Service;
 
-class FormInputValidator
-{
-    private $emailAddresses;
+class FormInputValidator {
 
-    public function __construct($emailAddresses)
-    {
-        $this->setEmailAddresses($emailAddresses);
-        $this->removeSpaces();
+  private $emailAddresses;
+
+  public function __construct($emailAddresses) {
+    $this->setEmailAddresses($emailAddresses);
+    $this->removeSpaces();
+  }
+
+  private function splitAddresses() {
+    return explode(',', $this->emailAddresses);
+  }
+
+  private function removeSpaces() {
+    $addresses = $this->splitAddresses();
+    $addressesWithoutSpaces = [];
+    $i = 0;
+
+    foreach ($addresses as $address) {
+      $address = preg_replace('/\s+/', '', $address);
+      $addressesWithoutSpaces[$i++] = $address;
     }
 
-    private function splitAddresses()
-    {
-        return explode(',', $this->emailAddresses);
-    }
+    $this->setEmailAddresses($addressesWithoutSpaces);
+  }
 
-    private function removeSpaces()
-    {
-        $addresses = $this->splitAddresses();
+  public function getEmailAddresses() {
+    return $this->emailAddresses;
+  }
 
-        $addresses_without_spaces = [];
+  public function setEmailAddresses($emailAddresses) {
+    $this->emailAddresses = $emailAddresses;
+  }
 
-        $i = 0;
-        foreach ($addresses as $address)
-        {
-            $address = preg_replace('/\s+/', '', $address);
-            $addresses_without_spaces[$i++] = $address;
-        }
-
-        $this->setEmailAddresses($addresses_without_spaces);
-    }
-
-    public function getEmailAddresses()
-    {
-        return $this->emailAddresses;
-    }
-
-    public function setEmailAddresses($emailAddresses)
-    {
-        $this->emailAddresses = $emailAddresses;
-    }
 }
