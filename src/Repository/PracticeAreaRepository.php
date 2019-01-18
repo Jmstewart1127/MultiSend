@@ -12,6 +12,7 @@ namespace Drupal\multisend\Repository;
 interface PracticeAreaRepository {
 
     public function getPracticeAreaById($id);
+    public function getPracticeAreaAlias($id);
     public function getSinglePracticeAreaDataById($id);
     public function getAllPracticeAreas();
 

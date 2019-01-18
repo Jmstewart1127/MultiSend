@@ -5,8 +5,7 @@
  * Module file for block_example.
  */
 
-function multisend_theme($existing, $type, $theme, $path)
-{
+function multisend_theme($existing, $type, $theme, $path) {
     return array(
         'multisend_template_form' => array(
             'variables' => array('form' => null),
@@ -20,12 +19,12 @@ function multisend_theme($existing, $type, $theme, $path)
 
         'multisend_template_form_for_practice_area' => array(
             'variables' => array('data' => null),
-            'template' => 'template-page-multisend-form-with-attorney'
+            'template' => 'template-page-multisend-form-single-practice-area'
         ),
 
         'multisend_template_form_for_all_practice_areas' => array(
             'variables' => array('data' => null),
-            'template' => 'template-page-multisend-form-with-attorney'
+            'template' => 'template-page-multisend-form-all-practice-areas'
         ),
     );
 }

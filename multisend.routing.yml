@@ -6,22 +6,6 @@ multisend.admin_configuration:
   requirements:
     _permission: 'access content'
 
-multisend.form:
-  path: '/share/page'
-  defaults:
-    _form: '\Drupal\multisend\Form\MultiSendForm'
-    _title: 'Share Page'
-  requirements:
-    _permission: 'access content'
-
-multisend.form_template:
-  path: '/share/attorney'
-  defaults:
-    _controller: '\Drupal\multisend\Controller\FormController::showContactForm'
-    _title: 'Share Attorney'
-  requirements:
-    _permission: 'access content'
-
 multisend.form_template_with_attorney:
   path: '/share/attorneys/{attorney}'
   defaults:

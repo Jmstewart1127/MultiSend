@@ -23,6 +23,10 @@ class PracticeAreaService implements PracticeAreaRepository {
     return $this->nodeService->getNodeById($id);
   }
 
+  public function getPracticeAreaAlias($id) {
+    return $this->nodeService->getNodeAlias($id);
+  }
+
   private function getChairs($practice_area) {
     $chairs = $practice_area->get('field_chairs_ref')->referencedEntities();
     $store_chairs = [];

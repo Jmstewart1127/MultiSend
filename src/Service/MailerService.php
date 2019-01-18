@@ -71,7 +71,7 @@ class MailerService {
     $single_practice_area = $this->practiceAreaService
       ->getSinglePracticeAreaDataById($this->nodeId);
 
-    $template = '<h3>' . $single_practice_area['practice_area_title'] . '</h3><hr>';
+    $template = '<h3>' . $single_practice_area['name'] . '</h3>';
     $template .= '<h3>Chairs</h3><hr>';
     $template .= '<ul>';
 
@@ -79,7 +79,7 @@ class MailerService {
       $template .=
         '<li>' .
         '<a href="' . $this->baseUrl . $chair['chair_alias'] . '">'
-        . $chair['name_title'] .
+        . $chair['chair_name'] .
         '</a>' .
         '</li>';
     }
@@ -92,7 +92,7 @@ class MailerService {
       $template .=
         '<li>' .
         '<a href="' . $this->baseUrl . $member['member_alias'] . '">'
-        . $chair['member_name'] .
+        . $member['member_name'] .
         '</a>' .
         '</li>';
     }
@@ -152,8 +152,7 @@ class MailerService {
       $template .= '<p>' . $bio_tab['body'] . '</p>';
     }
 
-    $template .= '<img src="' . $this->createImageUrl($attorney['image']) . '">';
-    $template .= '<p>' . $attorney['image'] . '</p>';
+    $template .= '<img src="' . $this->createImageUrl($attorney['image']) . '" style="max-height: 200px;">';
     $template .= '<p>' . $attorney['name'] . '</p>';
     $template .= '<p>' . $attorney['title'] . '</p>';
 
