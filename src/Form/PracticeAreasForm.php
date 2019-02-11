@@ -94,6 +94,14 @@ class PracticeAreasForm extends FormBase {
     return $form;
   }
 
+  private function getMessageData(FormStateInterface $form_state) {
+    return [
+      'sender_name' => $form_state->getValue('user_name'),
+      'subject' => $form_state->getValue('subject'),
+      'message' => $form_state->getValue('message'),
+    ];
+  }
+
   /**
    * Form submission handler.
    *
@@ -103,20 +111,21 @@ class PracticeAreasForm extends FormBase {
    *   The current state of the form.
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    $node_id = $form_state->getValue('node_id');
     $email_addresses = $form_state->getValue('send_to_addresses');
+    $message_data = $this->getMessageData($form_state);
     $this->formValidator = new FormInputValidator($email_addresses);
-    $this->mailerService = new MailerService(new PHPMailer(true));
+    $this->mailerService = new MailerService(new PHPMailer(true), $message_data, $node_id);
     $email_addresses = $this->formValidator->getEmailAddresses();
 
     foreach ($form_state->getValues() as $key => $value) {
-      drupal_set_message($key . ': ' . $value);
       if ($key == 'send_to_addresses') {
         foreach ($email_addresses as $email_address) {
-          drupal_set_message('email address' . $email_address);
-          $this->mailerService->sendFormData('ALL_PRACTICE_AREAS', $email_address);
+          $this->mailerService->sendFormData('PRACTICE_AREAS', $email_address);
         }
       }
     }
+    drupal_set_message("Message Sent.");
   }
 
 }

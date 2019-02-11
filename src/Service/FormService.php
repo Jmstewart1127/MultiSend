@@ -13,6 +13,11 @@ class FormService {
 
   public function __construct() {}
 
+  public function getAttorneyContactForm($node_id = NULL) {
+    return \Drupal::formBuilder()
+      ->getForm('Drupal\multisend\Form\AttorneyForm', $node_id);
+  }
+
   public function getAttorneyForm($node_id = NULL) {
     return \Drupal::formBuilder()
       ->getForm('Drupal\multisend\Form\MultiSendForm', $node_id);
