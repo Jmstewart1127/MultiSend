@@ -33,4 +33,9 @@ class FormService {
       ->getForm('Drupal\multisend\Form\PracticeAreas');
   }
 
+  public function getNewsForm($node_id = NULL) {
+    return \Drupal::formBuilder()
+      ->getForm('Drupal\multisend\Form\NewsForm', $node_id);
+  }
+
 }

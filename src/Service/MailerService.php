@@ -10,6 +10,7 @@ class MailerService {
   private $config;
   private $attorneyService;
   private $practiceAreaService;
+  private $newsArticleService;
   private $nodeId;
   private $baseUrl;
   private $messageData;
@@ -22,6 +23,7 @@ class MailerService {
     $this->messageData = $messageData;
     $this->attorneyService = new AttorneyService();
     $this->practiceAreaService = new PracticeAreaService();
+    $this->newsArticleService = new NewsService();
   }
 
   public function sendFormData($TEMPLATE_TYPE, $recipient) {
@@ -69,7 +71,10 @@ class MailerService {
         return $this->getAttorneyTemplate();
       case 'ATTORNEY_CONTACT':
         return $this->getAttorneyContactFormTemplate();
+      case 'NEWS_FORM':
+        return $this->getNewsArticleTemplate();
     }
+    return -1;
   }
 
   private function getSinglePracticeAreaTemplate() {
@@ -171,4 +176,17 @@ class MailerService {
     return $template;
   }
 
+  private function getNewsArticleTemplate() {
+    $article = $this->newsArticleService
+      ->getNewsArticleInfoById($this->nodeId);
+
+    $template = '<img src="' . $this->createTemplateBannerUrl() . '" style="height: auto; width: auto;">';
+    $template .= '<p>Message From: ' . $this->messageData['sender_name'] . '</p>';
+    $template .= '<p>Message Subject: ' . $this->messageData['subject'] . '</p>';
+    $template .= '<p>Message: ' . $this->messageData['message'] . '</p><hr>';
+    $template .= '<h3>' . $article['title'] . '</h3>';
+    $template .= '<p>' . $article['body'] . '</p>';
+    $template .= '<img src="' . $article['image'] . '" style="max-height: 400px; width: auto;">';
+    return $template;
+  }
 }

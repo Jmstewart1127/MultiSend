@@ -5,6 +5,7 @@ namespace Drupal\multisend\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\multisend\Service\AttorneyService;
 use Drupal\multisend\Service\FormService;
+use Drupal\multisend\Service\NewsService;
 use Drupal\multisend\Service\PracticeAreaService;
 
 class FormController extends ControllerBase {
@@ -12,11 +13,13 @@ class FormController extends ControllerBase {
   private $attorneyService;
   private $practiceAreaService;
   private $formService;
+  private $newsArticleService;
 
   public function __construct() {
     $this->attorneyService = new AttorneyService();
     $this->practiceAreaService = new PracticeAreaService();
     $this->formService = new FormService();
+    $this->newsArticleService = new NewsService();
   }
 
   public function showFormWithAttorney($attorney) {
@@ -57,6 +60,20 @@ class FormController extends ControllerBase {
         'practice_areas' => $nodes,
       ],
     ];
+  }
+
+  public function showFormForNewsArticle($articleId) {
+    $node = $this->newsArticleService
+      ->getNewsArticleById($articleId);
+
+    return [
+      '#theme' => 'multisend_template_form_for_news_article',
+      '#data' => [
+        'form' => $this->formService
+          ->getNewsForm($node->id())
+      ],
+    ];
+
   }
 
 }

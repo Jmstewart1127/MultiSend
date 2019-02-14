@@ -24,6 +24,15 @@ multisend.form_template_for_practice_area:
     _permission: 'access content'
     name: '^[0-9]*$'
 
+multisend.form_template_for_news_article:
+  path: '/share/news/{articleId}'
+  defaults:
+    _controller: '\Drupal\multisend\Controller\FormController::showFormForNewsArticle'
+    _title: 'Share News Article'
+  requirements:
+    _permission: 'access content'
+    name: '^[0-9]*$'
+
 multisend.form_template_for_all_practice_areas:
   path: '/share/practice-areas/'
   defaults:

@@ -26,6 +26,11 @@ function multisend_theme($existing, $type, $theme, $path) {
             'variables' => array('data' => null),
             'template' => 'template-page-multisend-form-all-practice-areas'
         ),
+
+        'multisend_template_form_for_news_article' => array(
+            'variables' => array('data' => null),
+            'template' => 'template-page-multisend-form-news-article'
+        ),
     );
 }
 
