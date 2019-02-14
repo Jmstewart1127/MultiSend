@@ -71,7 +71,7 @@ class MailerService {
         return $this->getAttorneyTemplate();
       case 'ATTORNEY_CONTACT':
         return $this->getAttorneyContactFormTemplate();
-      case 'NEWS_FORM':
+      case 'NEWS_ARTICLE':
         return $this->getNewsArticleTemplate();
     }
     return -1;
@@ -186,7 +186,7 @@ class MailerService {
     $template .= '<p>Message: ' . $this->messageData['message'] . '</p><hr>';
     $template .= '<h3>' . $article['title'] . '</h3>';
     $template .= '<p>' . $article['body'] . '</p>';
-    $template .= '<img src="' . $article['image'] . '" style="max-height: 400px; width: auto;">';
+    // $template .= '<img src="' . $article['image'] . '" style="max-height: 400px; width: auto;">';
     return $template;
   }
 }

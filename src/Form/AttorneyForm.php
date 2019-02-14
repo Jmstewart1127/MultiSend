@@ -15,7 +15,6 @@ use Drupal\multisend\Service\MailerService;
 use Drupal\smtp\PHPMailer\PHPMailer;
 
 class AttorneyForm extends FormBase {
-  private $formValidator;
   private $mailerService;
 
   public function __construct() {}

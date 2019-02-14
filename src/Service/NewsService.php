@@ -21,6 +21,10 @@ class NewsService {
     return $this->nodeService->getNodeById($id);
   }
 
+  public function getNewsArticleAlias($id) {
+    return $this->nodeService->getNodeAlias($id);
+  }
+
   public function getNewsArticleInfoById($id) {
     $article = $this->nodeService->getNodeById($id);
     $tags = $article->field_tags->referencedEntities();
@@ -28,7 +32,6 @@ class NewsService {
     return [
       'title' => $article->getTitle(),
       'body' => $article->body->value,
-      'image' => $article->field_image->entity->getFileUri()
     ];
   }
 

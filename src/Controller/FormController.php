@@ -63,17 +63,17 @@ class FormController extends ControllerBase {
   }
 
   public function showFormForNewsArticle($articleId) {
-    $node = $this->newsArticleService
-      ->getNewsArticleById($articleId);
-
+    $node = $this->newsArticleService->getNewsArticleById($articleId);
     return [
       '#theme' => 'multisend_template_form_for_news_article',
       '#data' => [
         'form' => $this->formService
-          ->getNewsForm($node->id())
+          ->getNewsForm($articleId),
+        'article_title' => $node->title->value,
+        'article_alias' => $this->newsArticleService
+          ->getNewsArticleAlias($articleId),
       ],
     ];
-
   }
 
 }

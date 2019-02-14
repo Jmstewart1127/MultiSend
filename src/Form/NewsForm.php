@@ -9,7 +9,13 @@
 namespace Drupal\multisend\Form;
 
 
-class NewsForm {
+use Drupal\Core\Form\FormBase;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\multisend\Service\FormInputValidator;
+use Drupal\multisend\Service\MailerService;
+use Drupal\smtp\PHPMailer\PHPMailer;
+
+class NewsForm extends FormBase{
   private $formValidator;
   private $mailerService;
 
@@ -36,8 +42,8 @@ class NewsForm {
    *   An associative array containing the structure of the form.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
-   * @param string $attorney
-   *   Attorney ID passed from controller.
+   * @param string $node_id
+   *   Article ID passed from controller.
    *
    * @return array
    *   The form structure.
